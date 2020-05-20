@@ -75,6 +75,13 @@ Test Driven Development in Ruby."
   :type '(list)
   :group 'ruby-test)
 
+(defcustom ruby-test-plain-test-options
+  '()
+  "Pass extra command line options to minitest when running specs"
+  :initialize 'custom-initialize-default
+  :type '(list)
+  :group 'ruby-test)
+
 (defvar ruby-test-default-library
   "test"
   "Define the default test library.")
@@ -437,6 +444,8 @@ and replace the match with the second element."
               (setq name-options (format "--name \"/%s/\"" test-case))
             (error "No test case at %s:%s" filename line-number)))
       (setq name-options ""))
+    (if (not (null ruby-test-plain-test-options))
+        (setq name-options (concat (mapconcat 'identity ruby-test-plain-test-options " "))))
     (format "%s %s %s %s" command (mapconcat 'identity options " ") filename name-options)))
 
 (defun ruby-test-project-root (filename root-predicate)
